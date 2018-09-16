@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from . import config
@@ -12,7 +13,7 @@ class Pin:
         self.pin_id = pin_id
 
     def create(self, board: str, note: str, link: str = None,
-               image=None, image_url: str = None, image_base64: str = None,
+               image: str = None, image_url: str = None, image_base64: str = None,
                fields: List[str] = None):
         """
         Creates a Pin for the authenticated user.
@@ -41,14 +42,18 @@ class Pin:
             'note': note,
             'link': link
         }
-        # TODO: Add support for image
-        if image_url is not None:
+        files = {}
+        if image is not None:
+            if not os.path.exists(image):
+                raise PinterestException("Pin: image does not exist")
+            files['image'] = open(image, 'rb')
+        elif image_url is not None:
             data['image_url'] = image_url
         elif image_base64 is not None:
             data['image_base64'] = image_base64
         else:
             raise PinterestException("Pin: create() requires either image, image_url, or image_base64")
-        return do_request('post', url, params=params, data=data).json()
+        return do_request('post', url, params=params, data=data, files=files).json()
 
     def fetch(self, fields: List[str] = None):
         """

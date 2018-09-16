@@ -1,5 +1,8 @@
 # Python Pinterest API
 
+![license MIT](https://s3-us-west-1.amazonaws.com/bryand1/images/badges/license-MIT-blue.svg)
+![python 3.6 | 3.7](https://s3-us-west-1.amazonaws.com/bryand1/images/badges/python-3.6-3.7.svg)
+
 ### Usage
 
 ```python
@@ -84,5 +87,5 @@ api.unfollow_user(username)
 
 ### Resources
 
-[Pinterest Developer API](https://developers.pinterest.com/docs/getting-started/introduction/)
+[Pinterest Developer API](https://developers.pinterest.com/docs/getting-started/introduction/)  
 [Pinterest API Explorer](https://developers.pinterest.com/tools/api-explorer/)

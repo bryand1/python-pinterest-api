@@ -3,6 +3,7 @@
 ![license MIT](https://s3-us-west-1.amazonaws.com/bryand1/images/badges/license-MIT-blue.svg)
 ![python 3.6 | 3.7](https://s3-us-west-1.amazonaws.com/bryand1/images/badges/python-3.6-3.7.svg)
 
+
 ### Usage
 
 ```python
@@ -38,7 +39,7 @@ api.board("username/halloween").delete()
 # Fetch board suggestions
 api.suggest_boards(pin=162129655315312286)
 
-# Fetch authenciated user's pins
+# Fetch authenticated user's pins
 api.pins()
 
 # Create a pin
@@ -82,6 +83,38 @@ api.unfollow_board(board)
 
 # Make authenticated user unfollow user
 api.unfollow_user(username)
+
+# Fetch another user's info
+api.user(username)
+
+# Fetch board sections
+api.board("695665542379586148").sections()
+
+# Create board section
+api.board("695665542379586148").section("Section Title").create()
+
+# Delete board section
+api.board("695665542379586148").section("4989415010584246390").delete()
+
+# Fetch pins in board section
+api.board("695665542379586148").section("4989343507360527350").pins()
+```
+
+
+### Responses
+
+The Pinterest API responses are in JSON format.
+
+```python
+api.me()  # By default, retry http request up to 3 times
+```
+
+```javascript
+{'data': {'first_name': 'Bryan',
+          'id': '695665611098925391',
+          'last_name': 'Andrade',
+          'url': 'https://www.pinterest.com/bandrade1815/'}}
+
 ```
 
 

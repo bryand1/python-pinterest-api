@@ -17,7 +17,7 @@ URL = 'https://github.com/bryand1/python-pinterest-api'
 EMAIL = 'me@bryanandrade.com'
 AUTHOR = 'Bryan Andrade'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.0.1'
+VERSION = '0.0.3'
 REQUIRED = ['requests']
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -86,6 +86,8 @@ setup(
     py_modules=['pinterest'],
     install_requires=REQUIRED,
     include_package_data=True,
+    packages=find_packages(),
+    zip_safe=False,
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',

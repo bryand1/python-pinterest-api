@@ -34,19 +34,21 @@ class Me:
         """
         url = config.api_url + '/v1/me/boards/suggested/'
         params = {'access_token': self.token, 'pin': pin_id}
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
-    def pins(self, cursor=None):
+    def pins(self, fields: List[str] = None, cursor: str = None):
         """
         The default response returns the ID, link, URL and descriptions of the authenticated user’s Pins.
 
         GET /v1/me/pins/
         """
+        if fields is None:
+            fields = ['id', 'link', 'url']
         url = config.api_url + '/v1/me/pins/'
-        params = {'access_token': self.token}
+        params = {'access_token': self.token, 'fields': ','.join(fields)}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
     def search_boards(self, query, cursor=None):
         """
@@ -60,7 +62,7 @@ class Me:
         params = {'access_token': self.token, 'query': query}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
     def search_pins(self, query, cursor=None):
         """
@@ -74,7 +76,7 @@ class Me:
         params = {'access_token': self.token, 'query': query}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
     def follow_board(self, board):
         """
@@ -85,7 +87,7 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/boards/'
         data = {'access_token': self.token, 'board': board}
-        return do_request('post', url, data=data)
+        return do_request('post', url, data=data).json()
 
     def follow_user(self, user):
         """
@@ -96,7 +98,7 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/users/'
         data = {'access_token': self.token, 'user': user}
-        return do_request('post', url, data=data)
+        return do_request('post', url, data=data).json()
 
     def followers(self, cursor=None):
         """
@@ -109,7 +111,7 @@ class Me:
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
     def following_boards(self, cursor=None):
         """
@@ -122,7 +124,7 @@ class Me:
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params)
+        return do_request('get', url, params=params).json()
 
     def following_interests(self, cursor: str = None, fields: List[str] = None) -> Dict[str, Any]:
         """
@@ -169,7 +171,7 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/boards/{board}/'.format(board=board)
         data = {'access_token': self.token}
-        return do_request('delete', url, data=data)
+        return do_request('delete', url, data=data).json()
 
     def unfollow_user(self, user):
         """
@@ -180,7 +182,7 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/users/{user}/'.format(user=user)
         params = {'access_token': self.token}
-        return do_request('delete', url, params=params)
+        return do_request('delete', url, params=params).json()
 
     def __call__(self, fields: List[str] = None):
         """

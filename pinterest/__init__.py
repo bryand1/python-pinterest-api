@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
 from .board import Board
+from .err import PinterestException, PinterestHttpException
 from .me import Me
 from . import oauth2
 from .pin import Pin

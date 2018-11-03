@@ -25,6 +25,7 @@ api.boards()
 api.board().create("Halloween", description="Fun Costumes")
 
 # Fetch board
+api.board("695665542379607495").fetch()
 api.board("username/halloween").fetch()
 
 # Fetch pins on board

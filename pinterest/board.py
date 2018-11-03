@@ -36,14 +36,16 @@ class Board:
         }
         return do_request('post', url, params=params, data=data).json()
 
-    def fetch(self):
+    def fetch(self, fields: List[str] = None):
         """
         The default response returns the ID, URL and name of the specified board.
 
         GET /v1/boards/<board>/
         """
-        url = config.api_url + "/v1/boards/{name}/".format(name=self.name)
-        params = {'access_token': self.token}
+        if fields is None:
+            fields = ['id', 'url', 'name']
+        url = config.api_url + "/v1/boards/{identifier}/".format(identifier=self.identifier)
+        params = {'access_token': self.token, 'fields': ','.join(fields)}
         return do_request('get', url, params=params).json()
 
     def pins(self, cursor: str = None, fields: List[str] = None):
@@ -58,7 +60,7 @@ class Board:
         """
         if fields is None:
             fields = ['id', 'url', 'link', 'description']
-        url = config.api_url + "/v1/boards/{name}/pins/".format(name=self.name)
+        url = config.api_url + "/v1/boards/{identifier}/pins/".format(identifier=self.identifier)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
         if cursor is not None:
             params['cursor'] = cursor
@@ -77,7 +79,7 @@ class Board:
             raise PinterestException("Board: edit() requires valid name or description")
         if fields is None:
             fields = ['id', 'name', 'url']
-        url = config.api_url + '/v1/boards/{name}/'.format(name=self.name)
+        url = config.api_url + '/v1/boards/{identifier}/'.format(identifier=self.identifier)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
         data = {"name": new_name, "description": new_description}
         return do_request('patch', url, params=params, data=data).json()
@@ -88,9 +90,9 @@ class Board:
 
         DELETE /v1/boards/<board>/
         """
-        if self.name is None:
-            raise PinterestException("Board: delete() requires valid name")
-        url = config.api_url + "/v1/boards/{name}/".format(name=self.name)
+        if self.identifier is None:
+            raise PinterestException("Board: delete() requires valid identifier")
+        url = config.api_url + "/v1/boards/{identifier}/".format(identifier=self.identifier)
         params = {'access_token': self.token}
         return do_request('delete', url, params=params).json()
 
@@ -100,13 +102,13 @@ class Board:
 
         GET /v1/board/<board>/sections/
         """
-        if self.name is None:
-            raise PinterestException("Board: sections() requires valid name")
-        url = config.api_url + '/v1/board/{name}/sections/'.format(name=self.name)
+        if self.identifier is None:
+            raise PinterestException("Board: sections() requires valid identifier")
+        url = config.api_url + '/v1/board/{identifier}/sections/'.format(identifier=self.identifier)
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
         return do_request('get', url, params=params).json()
 
     def section(self, identifier: str = None) -> Section:
-        return Section(self.token, self.name, identifier=identifier)
+        return Section(self.token, self.identifier, identifier=identifier)

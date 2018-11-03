@@ -8,12 +8,12 @@ from .util import do_request
 
 class Board:
 
-    def __init__(self, token: str, name: str = None):
-        """name could be in board:spec format '<username>/<board_name>' or string of interegers 695665542379586148"""
+    def __init__(self, token: str, identifier: str = None):
+        """identifier uses board:spec format '<username>/<board_name>' or string of integers 695665542379586148"""
         self.token = token
-        self.name = name.lower().replace(' ', '-')  # "username/Halloween Costumes" -> username/halloween-costumes
+        self.identifier = identifier
 
-    def create(self, description: str = None, fields: List[str] = None):
+    def create(self, name: str, description: str = None, fields: List[str] = None):
         """
         Creates a board for the authenticated user.
 
@@ -23,8 +23,6 @@ class Board:
 
         POST/v1/boards/
         """
-        if self.name is None:
-            raise PinterestException("Board: create() requires valid name")
         if fields is None:
             fields = ['name', 'id', 'url']
         url = config.api_url + "/v1/boards/"
@@ -33,8 +31,7 @@ class Board:
             'fields': ','.join(fields)
         }
         data = {
-
-            "name": self.name,
+            "name": name,
             "description": description,
         }
         return do_request('post', url, params=params, data=data).json()

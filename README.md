@@ -22,7 +22,7 @@ api.me()
 api.boards()
 
 # Create board
-api.board().create("halloween", description="Fun Costumes")
+api.board().create("Halloween", description="Fun Costumes")
 
 # Fetch board
 api.board("username/halloween").fetch()

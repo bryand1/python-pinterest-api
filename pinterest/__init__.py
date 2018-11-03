@@ -21,8 +21,8 @@ class Pinterest:
         """Return a user's information"""
         return User(self.token, username).fetch(fields=fields)
 
-    def board(self, name: str = None) -> Board:
-        return Board(self.token, name=name)
+    def board(self, identifier: str = None) -> Board:
+        return Board(self.token, identifier=identifier)
 
     def pin(self, pin_id: str = None) -> Pin:
         return Pin(self.token, pin_id=pin_id)

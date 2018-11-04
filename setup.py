@@ -17,7 +17,6 @@ URL = 'https://github.com/bryand1/python-pinterest-api'
 EMAIL = 'me@bryanandrade.com'
 AUTHOR = 'Bryan Andrade'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.0.4'
 REQUIRED = ['requests']
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -29,11 +28,8 @@ except FileNotFoundError:
     long_description = DESCRIPTION
 
 about = {}
-if not VERSION:
-    with open(os.path.join(here, NAME, '__version__.py')) as f:
-        exec(f.read(), about)
-else:
-    about['__version__'] = VERSION
+with open(os.path.join(here, NAME, '__version__.py')) as f:
+    exec(f.read(), about)
 
 
 class UploadCommand(Command):

@@ -1,7 +1,7 @@
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from . import config
-from .util import do_request
+from .util import pinterest_request
 
 
 class Me:
@@ -9,7 +9,7 @@ class Me:
     def __init__(self, token):
         self.token = token
 
-    def boards(self, fields: List[str] = None):
+    def boards(self, fields: List[str] = None) -> Dict:
         """
         The default response returns an ordered list of the authenticated user’s public boards,
         including the URL, ID and name. The boards are sorted first by user order, then by creation date,
@@ -23,9 +23,9 @@ class Me:
             fields = ['url', 'id', 'name']
         url = config.api_url + '/v1/me/boards/'
         params = {'access_token': self.token, 'fields': ','.join(fields)}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def suggest_boards(self, pin_id):
+    def suggest_boards(self, pin_id) -> Dict:
         """
         Returns the boards that Pinterest would suggest to the authenticated user if they were
         to save the specified Pin. The default response returns the ID, URL and name of the boards.
@@ -34,9 +34,9 @@ class Me:
         """
         url = config.api_url + '/v1/me/boards/suggested/'
         params = {'access_token': self.token, 'pin': pin_id}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def pins(self, fields: List[str] = None, cursor: str = None):
+    def pins(self, fields: List[str] = None, cursor: str = None, limit: int = None) -> Dict:
         """
         The default response returns the ID, link, URL and descriptions of the authenticated user’s Pins.
 
@@ -48,9 +48,11 @@ class Me:
         params = {'access_token': self.token, 'fields': ','.join(fields)}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def search_boards(self, query, cursor=None):
+    def search_boards(self, query: str, cursor: str = None, limit: int = None) -> Dict:
         """
         Searches the authenticated user’s board names (but not Pins on boards).
         An empty response indicates that nothing was found that matched your search terms.
@@ -62,9 +64,11 @@ class Me:
         params = {'access_token': self.token, 'query': query}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def search_pins(self, query, cursor=None):
+    def search_pins(self, query: str, cursor: str = None, limit: int = None) -> Dict:
         """
         Searches the authenticated user’s Pin descriptions.
         An empty response indicates that nothing was found that matched your search terms.
@@ -76,9 +80,11 @@ class Me:
         params = {'access_token': self.token, 'query': query}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def follow_board(self, board):
+    def follow_board(self, board) -> Dict:
         """
         Makes the authenticated user follow the specified board.
         A empty response (or lack of error code) indicates success.
@@ -87,9 +93,9 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/boards/'
         data = {'access_token': self.token, 'board': board}
-        return do_request('post', url, data=data).json()
+        return pinterest_request('post', url, data=data)
 
-    def follow_user(self, user):
+    def follow_user(self, user) -> Dict:
         """
         Makes the authenticated user follow the specified user.
         A empty response (or lack of error code) indicates success.
@@ -98,9 +104,9 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/users/'
         data = {'access_token': self.token, 'user': user}
-        return do_request('post', url, data=data).json()
+        return pinterest_request('post', url, data=data)
 
-    def followers(self, cursor=None):
+    def followers(self, cursor: str = None, limit: int = None) -> Dict:
         """
         Returns the users who follow the authenticated user.
         The default response returns the first and last name, ID and URL of the users.
@@ -111,9 +117,11 @@ class Me:
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def following_boards(self, cursor=None):
+    def following_boards(self, cursor: str = None, limit: int = None) -> Dict:
         """
         Returns the boards that the authenticated user follows.
         The default response returns the ID, name and URL of the board.
@@ -124,9 +132,11 @@ class Me:
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def following_interests(self, cursor: str = None, fields: List[str] = None) -> Dict[str, Any]:
+    def following_interests(self, fields: List[str] = None, cursor: str = None, limit: int = None) -> Dict:
         """
         Returns the topics (e.g, modern architecture, Sherlock) that the authenticated user follows.
         The default response returns the ID and name of the topic.
@@ -137,14 +147,16 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/interests/'
         params = {'access_token': self.token}
-        if cursor is not None:
-            params['cursor'] = cursor
         if fields is None:
             fields = ['id', 'name']
+        if cursor is not None:
+            params['cursor'] = cursor
+        if limit is not None:
+            params['limit'] = limit
         params['fields'] = ','.join(fields)
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def following_users(self, cursor: str = None, fields: List[str] = None) -> Dict[str, Any]:
+    def following_users(self, fields: List[str] = None, cursor: str = None, limit: int = None) -> Dict:
         """
         Returns the users that the authenticated user follows.
         The default response returns the first and last name, ID and URL of the users.
@@ -155,14 +167,16 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/users/'
         params = {'access_token': self.token}
-        if cursor is not None:
-            params['cursor'] = cursor
         if fields is None:
             fields = ['first_name', 'id', 'last_name', 'url']
+        if cursor is not None:
+            params['cursor'] = cursor
+        if limit is not None:
+            params['limit'] = limit
         params['fields'] = ','.join(fields)
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def unfollow_board(self, board: str):
+    def unfollow_board(self, board: str) -> Dict:
         """
         Makes the authenticated user unfollow the specified board.
         A empty response (or lack of error code) indicates success.
@@ -171,7 +185,7 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/boards/{board}/'.format(board=board)
         data = {'access_token': self.token}
-        return do_request('delete', url, data=data).json()
+        return pinterest_request('delete', url, data=data)
 
     def unfollow_user(self, user):
         """
@@ -182,9 +196,9 @@ class Me:
         """
         url = config.api_url + '/v1/me/following/users/{user}/'.format(user=user)
         params = {'access_token': self.token}
-        return do_request('delete', url, params=params).json()
+        return pinterest_request('delete', url, params=params)
 
-    def __call__(self, fields: List[str] = None):
+    def __call__(self, fields: List[str] = None) -> Dict:
         """
         The default response returns the first and last name, ID and URL of the authenticated user.
 
@@ -197,4 +211,4 @@ class Me:
         if fields is None:
             fields = ['first_name', 'last_name', 'id', 'url']
         params['fields'] = ','.join(fields)
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)

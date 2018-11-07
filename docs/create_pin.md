@@ -47,10 +47,18 @@ api.pin().create(
 ### Response
 
 ```javascript
-{'data': {'id': '695665473666621315',
-          'link': 'https://www.pinterest.com/r/pin/695665473666621315/4989327273560649264/a248f805acfbde23a36cbc0a6cbbb7cfa5377fcb8f5e647a9104801c75e99cbb',
-          'note': 'Git data structures',
-          'url': 'https://www.pinterest.com/pin/695665473666621315/'}}
+{
+  "data": {
+    "id": "695665473666621315",
+    "link": "https://www.pinterest.com/r/pin/695665473666621315/4989327273560649264/a248f805acfbde23a36cbc0a6cbbb7cfa5377fcb8f5e647a9104801c75e99cbb",
+    "note": "Git data structures",
+    "url": "https://www.pinterest.com/pin/695665473666621315/"
+  },
+  "ratelimit": {
+      "limit": 10,
+      "remaining": 9
+  }
+}
 
 ```
 

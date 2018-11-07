@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from .board import Board
 from .err import PinterestException, PinterestHttpException
@@ -14,11 +14,11 @@ class Pinterest:
         self.token = token
         self._me = Me(self.token)
 
-    def me(self, fields: List[str] = None) -> Dict[str, Any]:
+    def me(self, fields: List[str] = None) -> Dict:
         """Return authenticated user's information"""
         return self._me(fields=fields)
 
-    def user(self, username: str, fields: List[str] = None) -> Dict[str, Any]:
+    def user(self, username: str, fields: List[str] = None) -> Dict:
         """Return a user's information"""
         return User(self.token, username).fetch(fields=fields)
 

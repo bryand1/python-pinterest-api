@@ -1,7 +1,7 @@
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from . import config
-from .util import do_request
+from .util import pinterest_request
 
 
 class User:
@@ -10,7 +10,7 @@ class User:
         self.token = token
         self.username = username
 
-    def fetch(self, fields: List[str] = None) -> Dict[str, Any]:
+    def fetch(self, fields: List[str] = None) -> Dict:
         """
         Return a user's information
 
@@ -23,4 +23,4 @@ class User:
             fields = ['first_name', 'id', 'last_name', 'url']
         url = config.api_url + '/v1/users/{username}/'.format(username=self.username)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)

@@ -111,11 +111,18 @@ api.me()  # By default, retry http request up to 3 times
 ```
 
 ```javascript
-{'data': {'first_name': 'Bryan',
-          'id': '695665611098925391',
-          'last_name': 'Andrade',
-          'url': 'https://www.pinterest.com/bandrade1815/'}}
-
+{
+  "data": {
+    "first_name": "Bryan",
+    "id": "695665611098925391",
+    "last_name": "Andrade",
+    "url': "https://www.pinterest.com/bandrade1815/"
+  },
+  "ratelimit": {
+      "limit": 10,
+      "remaining": 9
+  }
+}
 ```
 
 

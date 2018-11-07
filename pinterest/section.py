@@ -1,8 +1,8 @@
-from typing import Any, Dict, List
+from typing import Dict
 
 from . import config
 from .err import PinterestException
-from .util import do_request
+from .util import pinterest_request
 
 
 class Section:
@@ -12,7 +12,7 @@ class Section:
         self.board = board
         self.identifier = identifier
 
-    def create(self) -> Dict[str, Any]:
+    def create(self) -> Dict:
         """
         Creates a section for the authenticated user. The default response returns the ID of the created section.
 
@@ -23,9 +23,9 @@ class Section:
         url = config.api_url + '/v1/board/{board}/sections/'.format(board=self.board)
         params = {'access_token': self.token}
         data = {'title': self.identifier}
-        return do_request('put', url, params=params, data=data).json()
+        return pinterest_request('put', url, params=params, data=data)
 
-    def pins(self):
+    def pins(self) -> Dict:
         """
         Gets the pins for a board section.
 
@@ -35,9 +35,9 @@ class Section:
             raise PinterestException("Section: pins() requires valid section identifier")
         url = config.api_url + '/v1/board/sections/{identifier}/pins/'.format(identifier=self.identifier)
         params = {'access_token': self.token}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('put', url, params=params)
 
-    def delete(self) -> Dict[str, Any]:
+    def delete(self) -> Dict:
         """
         Deletes a board section
 
@@ -49,4 +49,4 @@ class Section:
             raise PinterestException("Section: delete() requires valid section identifier")
         url = config.api_url + '/v1/board/sections/{identifier}/'.format(identifier=self.identifier)
         params = {'access_token': self.token}
-        return do_request('delete', url, params=params).json()
+        return pinterest_request('delete', url, params=params)

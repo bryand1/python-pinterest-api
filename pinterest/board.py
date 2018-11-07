@@ -1,9 +1,9 @@
-from typing import List
+from typing import Dict, List
 
 from . import config
 from .err import PinterestException
 from .section import Section
-from .util import do_request
+from .util import pinterest_request
 
 
 class Board:
@@ -13,7 +13,7 @@ class Board:
         self.token = token
         self.identifier = identifier
 
-    def create(self, name: str, description: str = None, fields: List[str] = None):
+    def create(self, name: str, description: str = None, fields: List[str] = None) -> Dict:
         """
         Creates a board for the authenticated user.
 
@@ -34,9 +34,9 @@ class Board:
             "name": name,
             "description": description,
         }
-        return do_request('post', url, params=params, data=data).json()
+        return pinterest_request('post', url, params=params, data=data)
 
-    def fetch(self, fields: List[str] = None):
+    def fetch(self, fields: List[str] = None) -> Dict:
         """
         The default response returns the ID, URL and name of the specified board.
 
@@ -46,9 +46,9 @@ class Board:
             fields = ['id', 'url', 'name']
         url = config.api_url + "/v1/boards/{identifier}/".format(identifier=self.identifier)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def pins(self, cursor: str = None, fields: List[str] = None):
+    def pins(self, fields: List[str] = None, cursor: str = None, limit: int = None) -> Dict:
         """The default response returns a list of ordered Pins on the board with their ID, URL, link and description.
 
         Pins are ordered from most recently created to least recent.
@@ -59,14 +59,16 @@ class Board:
         GET /v1/boards/<board>/pins/
         """
         if fields is None:
-            fields = ['id', 'url', 'link', 'description']
+            fields = ['id', 'url', 'link', 'note']
         url = config.api_url + "/v1/boards/{identifier}/pins/".format(identifier=self.identifier)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        if limit is not None:
+            params['limit'] = limit
+        return pinterest_request('get', url, params=params)
 
-    def edit(self, new_name: str = None, new_description: str = None, fields: List[str] = None):
+    def edit(self, new_name: str = None, new_description: str = None, fields: List[str] = None) -> Dict:
         """Changes the chosen board’s name and/or description.
 
         The default response returns the ID, URL and name of the edited board.
@@ -82,9 +84,9 @@ class Board:
         url = config.api_url + '/v1/boards/{identifier}/'.format(identifier=self.identifier)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
         data = {"name": new_name, "description": new_description}
-        return do_request('patch', url, params=params, data=data).json()
+        return pinterest_request('patch', url, params=params, data=data)
 
-    def delete(self):
+    def delete(self) -> Dict:
         """
         Deletes the specified board. This action is permanent and cannot be undone.
 
@@ -94,9 +96,9 @@ class Board:
             raise PinterestException("Board: delete() requires valid identifier")
         url = config.api_url + "/v1/boards/{identifier}/".format(identifier=self.identifier)
         params = {'access_token': self.token}
-        return do_request('delete', url, params=params).json()
+        return pinterest_request('delete', url, params=params)
 
-    def sections(self, cursor: str = None):
+    def sections(self, cursor: str = None) -> Dict:
         """
         Gets sections for a board.
 
@@ -108,7 +110,7 @@ class Board:
         params = {'access_token': self.token}
         if cursor is not None:
             params['cursor'] = cursor
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
     def section(self, identifier: str = None) -> Section:
         return Section(self.token, self.identifier, identifier=identifier)

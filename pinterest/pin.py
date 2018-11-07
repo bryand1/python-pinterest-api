@@ -1,9 +1,9 @@
 import os
-from typing import List
+from typing import Dict, List
 
 from . import config
 from .err import PinterestException
-from .util import do_request
+from .util import pinterest_request
 
 
 class Pin:
@@ -14,7 +14,7 @@ class Pin:
 
     def create(self, board: str, note: str, link: str = None,
                image: str = None, image_url: str = None, image_base64: str = None,
-               fields: List[str] = None):
+               fields: List[str] = None) -> Dict:
         """
         Creates a Pin for the authenticated user.
         The default response returns the note, URL, link and ID of the created Pin.
@@ -53,9 +53,9 @@ class Pin:
             data['image_base64'] = image_base64
         else:
             raise PinterestException("Pin: create() requires either image, image_url, or image_base64")
-        return do_request('post', url, params=params, data=data, files=files).json()
+        return pinterest_request('post', url, params=params, data=data, files=files)
 
-    def fetch(self, fields: List[str] = None):
+    def fetch(self, fields: List[str] = None) -> Dict:
         """
         The default response returns the ID, link, URL and note of the Pin.
 
@@ -68,9 +68,9 @@ class Pin:
             fields = ['id', 'link', 'url', 'note']
         url = config.api_url + '/v1/pins/{pin_id}/'.format(pin_id=self.pin_id)
         params = {'access_token': self.token, 'fields': ','.join(fields)}
-        return do_request('get', url, params=params).json()
+        return pinterest_request('get', url, params=params)
 
-    def edit(self, board: str = None, note: str = None, link: str = None, fields: List[str] = None):
+    def edit(self, board: str = None, note: str = None, link: str = None, fields: List[str] = None) -> Dict:
         """
         Changes the board, description and/or link of the Pin.
 
@@ -99,9 +99,9 @@ class Pin:
             data['note'] = note
         if link is not None:
             data['link'] = link
-        return do_request('patch', url, params=params, data=data).json()
+        return pinterest_request('patch', url, params=params, data=data)
 
-    def delete(self):
+    def delete(self) -> Dict:
         """
         Deletes the specified Pin. This action is permanent and cannot be undone.
 
@@ -109,4 +109,4 @@ class Pin:
         """
         url = config.api_url + '/v1/pins/{pin_id}/'.format(pin_id=self.pin_id)
         params = {'access_token': self.token}
-        return do_request('delete', url, params=params).json()
+        return pinterest_request('delete', url, params=params)

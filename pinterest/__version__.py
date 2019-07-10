@@ -1,7 +1,7 @@
 __title__ = 'pinterest-api'
 __description__ = 'Pinterest API client'
 __url__ = 'https://github.com/bryand1/python-pinterest-api'
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 __author__ = 'Bryan Andrade'
 __author_email__ = 'me@bryanandrade.com'
 __license__ = 'MIT'

@@ -4,7 +4,14 @@
 ![python 3.6 | 3.7](https://s3-us-west-1.amazonaws.com/bryand1/images/badges/python-3.6-3.7.svg)
 
 
-### Usage
+## Getting Started
+
+```bash
+pip install pinterest-api
+```
+
+
+## Usage
 
 ```python
 import pinterest
@@ -102,7 +109,7 @@ api.board("695665542379586148").section("4989343507360527350").pins()
 ```
 
 
-### Responses
+## Responses
 
 The Pinterest API responses are in JSON format.
 
@@ -126,7 +133,7 @@ api.me()  # By default, retry http request up to 3 times
 ```
 
 
-### Resources
+## Resources
 
 [Pinterest Developer API](https://developers.pinterest.com/docs/getting-started/introduction/)  
 [Pinterest API Explorer](https://developers.pinterest.com/tools/api-explorer/)

@@ -9,10 +9,11 @@ import os
 import sys
 from shutil import rmtree
 
-from setuptools import find_packages, setup, Command
+from setuptools import setup, Command
 
-NAME = 'pinterest'
-DESCRIPTION = 'Python Pinterest API'
+NAME = 'pinterest-api'
+PACKAGE = 'pinterest'
+DESCRIPTION = 'Pinterest API client'
 URL = 'https://github.com/bryand1/python-pinterest-api'
 EMAIL = 'me@bryanandrade.com'
 AUTHOR = 'Bryan Andrade'
@@ -79,14 +80,13 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    py_modules=['pinterest'],
     install_requires=REQUIRED,
     include_package_data=True,
-    packages=find_packages(),
+    packages=[PACKAGE],
     zip_safe=False,
     license='MIT',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Natural Language :: English',

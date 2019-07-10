@@ -29,7 +29,7 @@ except FileNotFoundError:
     long_description = DESCRIPTION
 
 about = {}
-with open(os.path.join(here, NAME, '__version__.py')) as f:
+with open(os.path.join(here, PACKAGE, '__version__.py')) as f:
     exec(f.read(), about)
 
 
